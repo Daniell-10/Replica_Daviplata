@@ -1,351 +1,432 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Eye, EyeOff, Plus, Send, Smartphone, CreditCard, 
-  User, Settings, Bell, ArrowLeft, ArrowRight, 
-  Home, Wallet, History, MoreHorizontal, QrCode,
-  Download, Upload, DollarSign, Phone, Zap, MapPin,
-  Store, Shirt, Gift
-} from 'lucide-react';
+import React, { useState } from 'react';
+import { User, MapPin, Bell, MessageCircle, Plus, Send, Download, Upload, Gift, QrCode, Eye, EyeOff } from 'lucide-react';
 
-const DaviPlataClone = () => {
-  const [currentView, setCurrentView] = useState('home');
+const DaviplataApp = () => {
   const [showBalance, setShowBalance] = useState(true);
-  const [user, setUser] = useState({
-    name: 'Juan Pérez',
-    phone: '+57 300 123 4567',
-    balance: 520000,
-    cardNumber: '**** **** **** 1234'
-  });
+  const [activeTab, setActiveTab] = useState('Mi DaviPlata');
 
-  const [transactions] = useState([
-    { id: 1, type: 'received', amount: 50000, description: 'Recibió Plata', date: '2024-01-15', from: 'María García' },
-    { id: 2, type: 'sent', amount: -25000, description: 'Pago servicios', date: '2024-01-14', to: 'EPM' },
-    { id: 3, type: 'received', amount: 100000, description: 'Recarga DaviPlata', date: '2024-01-13', from: 'Bancolombia' },
-    { id: 4, type: 'sent', amount: -15000, description: 'Compra en línea', date: '2024-01-12', to: 'MercadoLibre' },
-    { id: 5, type: 'received', amount: 30000, description: 'Transferencia P2P', date: '2024-01-11', from: 'Carlos Ruiz' }
-  ]);
-
-  const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('es-CO', {
-      style: 'currency',
-      currency: 'COP',
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    }).format(Math.abs(amount)).replace('COP', '$');
-  };
-
-  const Header = () => (
-    <div className="bg-red-600 text-white px-4 py-3">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <User className="w-6 h-6" />
-          <MapPin className="w-6 h-6" />
-        </div>
-        <div className="flex items-center">
-          <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 30'%3E%3Ctext x='50' y='20' text-anchor='middle' fill='white' font-family='Arial, sans-serif' font-size='14' font-weight='bold'%3EDaviPlata%3C/text%3E%3C/svg%3E" alt="DaviPlata" className="h-8" />
-        </div>
-        <div className="flex items-center space-x-4">
-          <Bell className="w-6 h-6" />
-          <Settings className="w-6 h-6" />
-        </div>
-      </div>
-    </div>
-  );
-
-  const BalanceCard = () => (
-    <div className="bg-gray-800 mx-4 mt-4 rounded-2xl overflow-hidden">
-      {/* Tabs */}
-      <div className="flex">
-        <button className="flex-1 bg-white text-gray-800 py-3 px-4 text-sm font-medium rounded-t-2xl">
-          Mi DaviPlata
-        </button>
-        <button className="flex-1 bg-gray-600 text-white py-3 px-4 text-sm font-medium rounded-t-2xl">
-          Mi Negocio
-        </button>
-      </div>
-      
-      {/* Balance Circle */}
-      <div className="p-8 flex flex-col items-center">
-        <div className="w-48 h-48 border-4 border-white rounded-full flex flex-col items-center justify-center mb-6">
-          <p className="text-white text-sm mb-2">¿Cuánto tengo?</p>
-          <div className="text-white text-2xl font-bold mb-1">
-            {showBalance ? formatCurrency(user.balance) : '••••••••'}
-          </div>
-          <p className="text-white text-xs">Disponible</p>
-          <button 
-            onClick={() => setShowBalance(!showBalance)}
-            className="text-red-400 text-xs mt-2 underline"
-          >
-            Ver más
-          </button>
-        </div>
-        
-        {/* Action Buttons */}
-        <div className="flex space-x-4 w-full max-w-xs">
-          <div className="flex-1 text-center">
-            <button 
-              className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center mb-2 mx-auto"
-              onClick={() => setCurrentView('meter-plata')}
-            >
-              <Plus className="w-8 h-8 text-white" />
-            </button>
-            <p className="text-white text-xs">Meter Plata</p>
-          </div>
-          
-          <div className="flex-1 text-center">
-            <button 
-              className="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center mb-2 mx-auto"
-              onClick={() => setCurrentView('pasar-plata')}
-            >
-              <Send className="w-8 h-8 text-white" />
-            </button>
-            <p className="text-white text-xs">Pasar Plata</p>
-          </div>
-          
-          <div className="flex-1 text-center">
-            <button 
-              className="w-16 h-16 bg-orange-400 rounded-full flex items-center justify-center mb-2 mx-auto"
-              onClick={() => setCurrentView('sacar-plata')}
-            >
-              <Download className="w-8 h-8 text-white" />
-            </button>
-            <p className="text-white text-xs">Sacar Plata</p>
-          </div>
-          
-          <div className="flex-1 text-center">
-            <button 
-              className="w-16 h-16 bg-gray-600 rounded-full flex items-center justify-center mb-2 mx-auto"
-              onClick={() => setCurrentView('mas')}
-            >
-              <MoreHorizontal className="w-8 h-8 text-white" />
-            </button>
-            <p className="text-white text-xs">Más</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const ServicesSection = () => (
-    <div className="p-4 space-y-4">
-      {/* Mis bolsillos */}
-      <div className="bg-gray-800 rounded-2xl p-4">
-        <div className="flex items-center justify-between mb-3">
-          <h3 className="text-white font-medium">Mis bolsillos</h3>
-          <ArrowRight className="w-5 h-5 text-gray-400" />
-        </div>
-        <p className="text-gray-300 text-sm">Programa tu ahorro y cumple tus propósitos</p>
-      </div>
-
-      {/* Tienda Virtual */}
-      <div className="bg-gray-800 rounded-2xl p-4">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
-              <Store className="w-5 h-5 text-gray-800" />
-            </div>
-            <h3 className="text-white font-medium">Tienda Virtual</h3>
-          </div>
-          <ArrowRight className="w-5 h-5 text-gray-400" />
-        </div>
-        <p className="text-gray-300 text-sm">Compra lo que necesita sin salir de DaviPlata</p>
-      </div>
-    </div>
-  );
-
-  const RecentMovements = () => (
-    <div className="p-4">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-white font-medium">Último movimiento</h3>
-        <button 
-          onClick={() => setCurrentView('history')}
-          className="text-red-400 text-sm underline"
-        >
-          Ver todos
-        </button>
-      </div>
-      
-      <div className="bg-gray-800 rounded-xl p-4">
-        <div className="flex items-center justify-between">
-          <span className="text-white">Recibió Plata</span>
-          <span className="text-green-400 font-semibold">+ $10.000,00</span>
-        </div>
-      </div>
-    </div>
-  );
-
-  const NFCSection = () => (
-    <div className="p-4">
-      <div className="bg-gray-800 rounded-xl p-4 flex items-center justify-between">
-        <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center">
-            <CreditCard className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-white font-medium">Pasar Plata por NFC</span>
-        </div>
-        <ArrowRight className="w-5 h-5 text-gray-400" />
-      </div>
-    </div>
-  );
-
-  const BottomNavigation = () => (
-    <div className="fixed bottom-0 left-0 right-0 bg-gray-900 px-4 py-2">
-      <div className="flex justify-around items-center">
-        <button
-          onClick={() => setCurrentView('home')}
-          className={`flex flex-col items-center py-2 px-3 rounded-lg transition-colors ${
-            currentView === 'home' 
-              ? 'text-white' 
-              : 'text-gray-500'
-          }`}
-        >
-          <Store className="w-6 h-6 mb-1" />
-          <span className="text-xs">Tienda Virtual</span>
-        </button>
-        
-        <div className="flex flex-col items-center">
-          <div className="w-14 h-14 bg-red-600 rounded-full flex items-center justify-center mb-1">
-            <Home className="w-7 h-7 text-white" />
-          </div>
-        </div>
-        
-        <button
-          onClick={() => setCurrentView('codigo-qr')}
-          className="flex flex-col items-center py-2 px-3 rounded-lg text-gray-500"
-        >
-          <QrCode className="w-6 h-6 mb-1" />
-          <span className="text-xs">Código QR</span>
-        </button>
-      </div>
-    </div>
-  );
-
-  const SendMoneyView = () => (
-    <div className="min-h-screen bg-gray-900">
-      <div className="bg-red-600 text-white p-4">
-        <div className="flex items-center mb-4">
-          <button onClick={() => setCurrentView('home')} className="mr-4">
-            <ArrowLeft className="w-6 h-6" />
-          </button>
-          <h1 className="text-xl font-semibold">Pasar Plata</h1>
-        </div>
-      </div>
-      
-      <div className="p-4 space-y-6">
-        <div className="bg-gray-800 rounded-xl p-4">
-          <h3 className="text-white font-semibold mb-4">¿A quién le vas a pasar plata?</h3>
-          <div className="space-y-3">
-            <input
-              type="tel"
-              placeholder="Número de celular"
-              className="w-full p-3 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent placeholder-gray-400"
-            />
-            <input
-              type="number"
-              placeholder="¿Cuánta plata?"
-              className="w-full p-3 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent placeholder-gray-400"
-            />
-            <textarea
-              placeholder="Mensaje (opcional)"
-              className="w-full p-3 bg-gray-700 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent placeholder-gray-400 h-20"
-            />
-            <button className="w-full bg-red-600 text-white py-3 rounded-lg font-semibold">
-              Continuar
-            </button>
-          </div>
-        </div>
-        
-        <div className="bg-gray-800 rounded-xl p-4">
-          <h3 className="text-white font-semibold mb-3">Contactos recientes</h3>
-          <div className="space-y-2">
-            {['María García', 'Carlos Ruiz', 'Ana López'].map((contact, index) => (
-              <button key={index} className="w-full text-left p-3 hover:bg-gray-700 rounded-lg flex items-center space-x-3">
-                <div className="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center">
-                  <User className="w-5 h-5 text-white" />
-                </div>
-                <span className="text-white">{contact}</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const HistoryView = () => (
-    <div className="min-h-screen bg-gray-900">
-      <div className="bg-red-600 text-white p-4">
-        <div className="flex items-center mb-4">
-          <button onClick={() => setCurrentView('home')} className="mr-4">
-            <ArrowLeft className="w-6 h-6" />
-          </button>
-          <h1 className="text-xl font-semibold">Historial</h1>
-        </div>
-      </div>
-      
-      <div className="p-4">
-        <div className="space-y-3">
-          {transactions.map((transaction) => (
-            <div key={transaction.id} className="bg-gray-800 rounded-xl p-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                    transaction.type === 'received' 
-                      ? 'bg-green-600' 
-                      : 'bg-red-600'
-                  }`}>
-                    {transaction.type === 'received' ? 
-                      <Download className="w-6 h-6 text-white" /> : 
-                      <Upload className="w-6 h-6 text-white" />
-                    }
-                  </div>
-                  <div>
-                    <p className="font-medium text-white">{transaction.description}</p>
-                    <p className="text-sm text-gray-400">
-                      {transaction.from && `De: ${transaction.from}`}
-                      {transaction.to && `Para: ${transaction.to}`}
-                    </p>
-                    <p className="text-xs text-gray-500">{transaction.date}</p>
-                  </div>
-                </div>
-                <div className={`font-semibold ${
-                  transaction.type === 'received' ? 'text-green-400' : 'text-red-400'
-                }`}>
-                  {transaction.type === 'received' ? '+' : '-'} {formatCurrency(transaction.amount)}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderView = () => {
-    switch (currentView) {
-      case 'pasar-plata':
-        return <SendMoneyView />;
-      case 'history':
-        return <HistoryView />;
-      default:
-        return (
-          <div className="min-h-screen bg-gray-900 pb-20">
-            <Header />
-            <BalanceCard />
-            <ServicesSection />
-            <RecentMovements />
-            <NFCSection />
-          </div>
-        );
+  const styles = {
+    container: {
+      maxWidth: '400px',
+      margin: '0 auto',
+      backgroundColor: '#374151',
+      minHeight: '100vh',
+      color: 'white',
+      fontFamily: 'Arial, sans-serif'
+    },
+    header: {
+      backgroundColor: '#dc2626',
+      padding: '16px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between'
+    },
+    tabContainer: {
+      display: 'flex',
+      padding: '16px 16px 0 16px',
+      marginBottom: '24px'
+    },
+    tabActive: {
+      padding: '8px 16px',
+      borderRadius: '9999px',
+      marginRight: '8px',
+      fontSize: '14px',
+      backgroundColor: 'white',
+      color: '#374151',
+      border: 'none',
+      cursor: 'pointer'
+    },
+    tabInactive: {
+      padding: '8px 16px',
+      borderRadius: '9999px',
+      fontSize: '14px',
+      backgroundColor: '#4b5563',
+      color: 'white',
+      border: 'none',
+      cursor: 'pointer'
+    },
+    balanceContainer: {
+      display: 'flex',
+      justifyContent: 'center',
+      marginBottom: '32px'
+    },
+    balanceCircle: {
+      backgroundColor: 'white',
+      borderRadius: '50%',
+      width: '192px',
+      height: '192px',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      color: '#374151',
+      position: 'relative'
+    },
+    balanceText: {
+      fontSize: '14px',
+      marginBottom: '8px'
+    },
+    balanceAmount: {
+      display: 'flex',
+      alignItems: 'center',
+      marginBottom: '8px'
+    },
+    balanceNumber: {
+      fontSize: '24px',
+      fontWeight: 'bold'
+    },
+    eyeButton: {
+      marginLeft: '8px',
+      color: '#6b7280',
+      background: 'none',
+      border: 'none',
+      cursor: 'pointer'
+    },
+    disponible: {
+      fontSize: '12px',
+      color: '#6b7280'
+    },
+    verMas: {
+      fontSize: '12px',
+      color: '#dc2626',
+      marginTop: '8px',
+      textDecoration: 'underline',
+      cursor: 'pointer'
+    },
+    actionButtons: {
+      display: 'flex',
+      justifyContent: 'center',
+      gap: '24px',
+      marginBottom: '32px'
+    },
+    actionButton: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      cursor: 'pointer'
+    },
+    actionIcon: {
+      borderRadius: '50%',
+      width: '48px',
+      height: '48px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: '8px'
+    },
+    redIcon: {
+      backgroundColor: '#dc2626'
+    },
+    orangeIcon: {
+      backgroundColor: '#f97316'
+    },
+    grayIcon: {
+      backgroundColor: '#4b5563'
+    },
+    actionText: {
+      fontSize: '12px',
+      textAlign: 'center'
+    },
+    infoCards: {
+      padding: '0 16px',
+      marginBottom: '24px'
+    },
+    infoCard: {
+      backgroundColor: '#374151',
+      borderRadius: '8px',
+      padding: '16px',
+      marginBottom: '16px',
+      cursor: 'pointer'
+    },
+    cardWithIcon: {
+      display: 'flex',
+      alignItems: 'center'
+    },
+    cardIcon: {
+      marginRight: '12px'
+    },
+    iconCircle: {
+      width: '32px',
+      height: '32px',
+      backgroundColor: '#4b5563',
+      borderRadius: '50%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    cardTitle: {
+      fontWeight: '600',
+      marginBottom: '4px'
+    },
+    cardDescription: {
+      fontSize: '12px',
+      color: '#d1d5db'
+    },
+    movementSection: {
+      padding: '0 16px',
+      marginBottom: '24px'
+    },
+    movementHeader: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: '12px'
+    },
+    movementTitle: {
+      fontWeight: '600'
+    },
+    verTodos: {
+      fontSize: '12px',
+      color: '#9ca3af',
+      textDecoration: 'underline',
+      cursor: 'pointer'
+    },
+    movementCard: {
+      backgroundColor: '#374151',
+      borderRadius: '8px',
+      padding: '16px'
+    },
+    movementItem: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center'
+    },
+    movementDescription: {
+      fontSize: '14px'
+    },
+    movementAmount: {
+      color: '#10b981',
+      fontWeight: '600'
+    },
+    nfcButton: {
+      padding: '0 16px',
+      marginBottom: '24px'
+    },
+    nfcContainer: {
+      border: '1px solid #dc2626',
+      borderRadius: '9999px',
+      padding: '12px 24px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      cursor: 'pointer'
+    },
+    nfcDot: {
+      width: '16px',
+      height: '16px',
+      backgroundColor: '#dc2626',
+      borderRadius: '50%',
+      marginRight: '8px'
+    },
+    nfcText: {
+      fontSize: '14px'
+    },
+    bottomNav: {
+      position: 'fixed',
+      bottom: '0',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      maxWidth: '400px',
+      width: '100%',
+      backgroundColor: '#1f2937',
+      padding: '12px 16px'
+    },
+    bottomNavContent: {
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center'
+    },
+    bottomNavItem: {
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      cursor: 'pointer'
+    },
+    bottomNavText: {
+      fontSize: '12px',
+      marginTop: '4px'
+    },
+    qrButton: {
+      backgroundColor: '#dc2626',
+      borderRadius: '50%',
+      width: '56px',
+      height: '56px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      cursor: 'pointer'
+    },
+    dotsGrid: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(2, 1fr)',
+      gap: '4px',
+      marginBottom: '4px'
+    },
+    dot: {
+      width: '4px',
+      height: '4px',
+      backgroundColor: 'white',
+      borderRadius: '50%'
+    },
+    spacer: {
+      height: '80px'
     }
   };
 
   return (
-    <div className="max-w-md mx-auto bg-gray-900 min-h-screen relative">
-      {renderView()}
-      <BottomNavigation />
+    <div style={styles.container}>
+      {/* Header */}
+      <div style={styles.header}>
+        <User size={24} />
+        <MapPin size={24} />
+        <div style={{ color: 'white', fontWeight: 'bold', fontSize: '18px' }}>DaviPlata</div>
+        <Bell size={24} />
+        <MessageCircle size={24} />
+      </div>
+
+      {/* Tab Navigation */}
+      <div style={styles.tabContainer}>
+        <button 
+          style={activeTab === 'Mi DaviPlata' ? styles.tabActive : styles.tabInactive}
+          onClick={() => setActiveTab('Mi DaviPlata')}
+        >
+          Mi DaviPlata
+        </button>
+        <button 
+          style={activeTab === 'Mi Negocio' ? styles.tabActive : styles.tabInactive}
+          onClick={() => setActiveTab('Mi Negocio')}
+        >
+          Mi Negocio
+        </button>
+      </div>
+
+      {/* Balance Circle */}
+      <div style={styles.balanceContainer}>
+        <div style={styles.balanceCircle}>
+          <p style={styles.balanceText}>¿Cuánto tengo?</p>
+          <div style={styles.balanceAmount}>
+            <span style={styles.balanceNumber}>
+              {showBalance ? '$520.000,00' : '••••••••'}
+            </span>
+            <button 
+              onClick={() => setShowBalance(!showBalance)}
+              style={styles.eyeButton}
+            >
+              {showBalance ? <EyeOff size={16} /> : <Eye size={16} />}
+            </button>
+          </div>
+          <p style={styles.disponible}>Disponible</p>
+          <p style={styles.verMas}>Ver más</p>
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div style={styles.actionButtons}>
+        <div style={styles.actionButton}>
+          <div style={Object.assign({}, styles.actionIcon, styles.redIcon)}>
+            <Plus size={24} color="white" />
+          </div>
+          <span style={styles.actionText}>Meter Plata</span>
+        </div>
+
+        <div style={styles.actionButton}>
+          <div style={Object.assign({}, styles.actionIcon, styles.orangeIcon)}>
+            <Send size={24} color="white" />
+          </div>
+          <span style={styles.actionText}>Pasar Plata</span>
+        </div>
+
+        <div style={styles.actionButton}>
+          <div style={Object.assign({}, styles.actionIcon, styles.orangeIcon)}>
+            <Download size={24} color="white" />
+          </div>
+          <span style={styles.actionText}>Sacar Plata</span>
+        </div>
+
+        <div style={styles.actionButton}>
+          <div style={Object.assign({}, styles.actionIcon, styles.grayIcon)}>
+            <div style={styles.dotsGrid}>
+              <div style={styles.dot}></div>
+              <div style={styles.dot}></div>
+              <div style={styles.dot}></div>
+              <div style={styles.dot}></div>
+            </div>
+          </div>
+          <span style={styles.actionText}>Más</span>
+        </div>
+      </div>
+
+      {/* Info Cards */}
+      <div style={styles.infoCards}>
+        <div style={styles.infoCard}>
+          <h3 style={styles.cardTitle}>Mis bolsillos</h3>
+          <p style={styles.cardDescription}>Programa tu ahorro y cumple tus propósitos</p>
+        </div>
+
+        <div style={Object.assign({}, styles.infoCard, styles.cardWithIcon)}>
+          <div style={styles.cardIcon}>
+            <div style={styles.iconCircle}>
+              <Gift size={16} />
+            </div>
+          </div>
+          <div>
+            <h3 style={styles.cardTitle}>Tienda Virtual</h3>
+            <p style={styles.cardDescription}>Compra lo que necesitas sin salir de DaviPlata</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Recent Movement */}
+      <div style={styles.movementSection}>
+        <div style={styles.movementHeader}>
+          <h3 style={styles.movementTitle}>Último movimiento</h3>
+          <span style={styles.verTodos}>Ver todos</span>
+        </div>
+        
+        <div style={styles.movementCard}>
+          <div style={styles.movementItem}>
+            <span style={styles.movementDescription}>Recibí Plata</span>
+            <span style={styles.movementAmount}>+ $10.000,00</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Pasar Plata por NFC */}
+      <div style={styles.nfcButton}>
+        <div style={styles.nfcContainer}>
+          <div style={styles.nfcDot}></div>
+          <span style={styles.nfcText}>Pasar Plata por NFC</span>
+        </div>
+      </div>
+
+      {/* Bottom Navigation */}
+      <div style={styles.bottomNav}>
+        <div style={styles.bottomNavContent}>
+          <div style={styles.bottomNavItem}>
+            <Gift size={24} />
+            <span style={styles.bottomNavText}>Tienda Virtual</span>
+          </div>
+          
+          <div style={styles.qrButton}>
+            <QrCode size={32} color="white" />
+          </div>
+          
+          <div style={styles.bottomNavItem}>
+            <div style={styles.dotsGrid}>
+              <div style={styles.dot}></div>
+              <div style={styles.dot}></div>
+              <div style={styles.dot}></div>
+              <div style={styles.dot}></div>
+            </div>
+            <span style={styles.bottomNavText}>Código QR</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Spacer for bottom navigation */}
+      <div style={styles.spacer}></div>
     </div>
   );
 };
 
-export default DaviPlataClone;
+export default DaviplataApp;
